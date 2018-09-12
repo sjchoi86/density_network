@@ -11,6 +11,7 @@ tfrui = tf.random_uniform_initializer
 class MDN_class(object):
     def __init__(self,_name='mdn',_x_dim=2,_y_dim=1,_k=5,_hids=[32,32],_actv=tf.nn.tanh,
                  _sig_max=0,_SCHEDULE_SIG_MAX=False,
+                 _l2_reg_coef=1e-3,
                  _sess=None,_VERBOSE=True):
         # Parse arguments
         self.name = _name
@@ -21,6 +22,7 @@ class MDN_class(object):
         self.actv = _actv
         self.sig_max = _sig_max
         self.SCHEDULE_SIG_MAX = _SCHEDULE_SIG_MAX
+        self.l2_reg_coef = _l2_reg_coef
         self.sess = _sess
         self.VERBOSE = _VERBOSE
         # Build graph
@@ -80,7 +82,7 @@ class MDN_class(object):
         # Optimizer
         _g_vars = tf.trainable_variables()
         self.c_vars = [var for var in _g_vars if '%s/'%(self.name) in var.name]
-        self.l2_reg = 1e-6*tf.reduce_sum(tf.stack([tf.nn.l2_loss(v) for v in self.c_vars])) # [1]
+        self.l2_reg = self.l2_reg_coef*tf.reduce_sum(tf.stack([tf.nn.l2_loss(v) for v in self.c_vars])) # [1]
         self.cost = -self.log_lik + self.l2_reg # [1]
         self.optm = tf.train.RMSPropOptimizer(learning_rate=1e-3).minimize(self.cost)
 
@@ -105,11 +107,11 @@ class MDN_class(object):
     # Plot results
     def plot_result(self,_x_test,_title='MDN result',_fontsize=18,
                     _figsize=(15,5),_wspace=0.05,_hspace=0.05,_sig_rate=1.0,_pi_th=0.0,
-                    _x_train=None,_y_train=None):
+                    _x_train=None,_y_train=None,
+                    _ylim=[-3,+3]):
         # sample
         y_sample = self.sess.run(self.y_sample,feed_dict={self.x:_x_test,self.sig_rate:_sig_rate}) # [n x y_dim] 
         mu,var,pi = self.sess.run([self.mu,self.var,self.pi],feed_dict={self.x:_x_test,self.sig_rate:_sig_rate})
-                
         # plot per each output dimensions (self.y_dim)
         nr,nc = 1,self.y_dim
         gs  = gridspec.GridSpec(nr,nc)
@@ -134,17 +136,20 @@ class MDN_class(object):
                 idx = np.where(pi[:,j]>_pi_th)[0]
                 plt.plot(_x_test[:,0],mu[:,i,j],'-',color=[0.8,0.8,0.8],linewidth=1)
                 plt.plot(_x_test[idx,0],mu[idx,i,j],'-',color=colors[j],linewidth=3)
+            plt.ylim(_ylim)
         plt.show()
         
     # Train 
-    def train(self,_x_train,_y_train,_x_test,_max_iter=10000,_pi_th=0.1,_SHOW_EVERY=10,_figsize=(15,5)):    
+    def train(self,_x_train,_y_train,_x_test,_max_iter=10000,_batch_size=256,_pi_th=0.1,_SHOW_EVERY=10,_figsize=(15,5),_ylim=[-3,+3]):    
         n_train = _x_train.shape[0]
         for iter in range(_max_iter): 
-            iter_rate_1to0 = np.exp(-10*((iter+1.0)/_max_iter)**2)
+            iter_rate_1to0 = np.exp(-4*((iter+1.0)/_max_iter)**2)
             iter_rate_0to1 = 1-iter_rate_1to0
             if self.SCHEDULE_SIG_MAX: # schedule sig_max
                 sig_rate = iter_rate_0to1
-            r_idx = np.random.permutation(n_train)[:128]
+            else:
+                sig_rate = iter_rate_0to1
+            r_idx = np.random.permutation(n_train)[:_batch_size]
             x_batch,y_batch = _x_train[r_idx,:],_y_train[r_idx,:] # current batch
             # Optimize the network 
             _,cost_val = self.sess.run([self.optm,self.cost],
@@ -156,7 +161,7 @@ class MDN_class(object):
                 self.plot_result(_x_test=_x_test,_x_train=_x_train,_y_train=_y_train,
                                  _sig_rate=sig_rate,_pi_th=_pi_th,
                                  _title='[%d/%d] Black dots:training data / Red crosses:samples'%(iter,_max_iter),
-                                 _fontsize=18,_figsize=_figsize )
+                                 _fontsize=18,_figsize=_figsize,_ylim=_ylim)
                 # Print-out
                 print ("[%03d/%d] cost:%.4f"%(iter,_max_iter,cost_val)) 
         
