@@ -1,3 +1,4 @@
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import tensorflow as tf
@@ -30,3 +31,22 @@ def gpu_sess():
     config.gpu_options.allow_growth=True
     sess = tf.Session(config=config)
     return sess    
+
+
+class nzr(object):
+    def __init__(self,_rawdata,_eps=1e-8):
+        self.rawdata = _rawdata
+        self.eps     = _eps
+        self.mu      = np.mean(self.rawdata,axis=0)
+        self.std     = np.std(self.rawdata,axis=0)
+        self.nzd_data = self.get_nzdval(self.rawdata)
+        self.org_data = self.get_orgval(self.nzd_data)
+        self.maxerr = np.max(self.rawdata-self.org_data)
+    def get_nzdval(self,_data):
+        _n = _data.shape[0]
+        _nzddata = (_data - np.tile(self.mu,(_n,1))) / np.tile(self.std+self.eps,(_n,1))
+        return _nzddata
+    def get_orgval(self,_data):
+        _n = _data.shape[0]
+        _orgdata = _data*np.tile(self.std+self.eps,(_n,1))+np.tile(self.mu,(_n,1))
+        return _orgdata
