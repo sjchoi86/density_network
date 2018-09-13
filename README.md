@@ -12,6 +12,8 @@ Each mixture whose mixture probability is bigger than certain theshold is shown 
 
 <img src="src/pic/fig_mdn_var.png" width="800" height="350" />
 
+Red and blue curves correspond to aleatoric and epistemic uncertainties of the prediction, respectively, where the aleatoric uncertainty models measurement noise and the epistemic uncertainty models the inconsistencies in the training dataset. As the level of (Gaussian) noise decreases as the input increases, the red curve decreases as input increases. On the contrary, the blue curve increases as input increases as the training data are collected from two different functions whose discrepancy increases as input increases. 
+
 We use `tf.contrib.distributions` to implement the computational graphs which supports `Categorical`, `MultivariateNormalDiag`, `Normal`, and the most important `Mixture`. `tf.contrib.distributions.Mixture` [api](https://www.tensorflow.org/api_docs/python/tf/contrib/distributions/Mixture) provides a number of useful apis such as `cdf`, `cross_entropy`, `entropy_lower_bound`, `kl_divergence`, `log_prob`, `prob`, `quantile`, and `sample`. 
 
 #### Contact: Sungjoon Choi (sungjoon.s.choi@gmail.com)
