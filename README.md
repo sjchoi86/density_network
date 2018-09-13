@@ -6,8 +6,8 @@ We implement two density modeling methods:
 
 Among with basic functionalities to train and sample, our mixture density network implementation is able to compute epistemic and aleatoric uncertainties of the prediction in our [paper](https://arxiv.org/abs/1709.02249). 
 
-![Image of Yaktocat](src/pic/fig_mdn_res.png)
-![Image of Yaktocat](src/pic/fig_mdn_var.png)
+<img src="src/pic/fig_mdn_res.png" width="800" height="300" />
+<img src="src/pic/fig_mdn_var.png" width="800" height="300" />
 
 We use `tf.contrib.distributions` to implement the computational graphs which supports `Categorical`, `MultivariateNormalDiag`, `Normal`, and the most important `Mixture`. `tf.contrib.distributions.Mixture` [api](https://www.tensorflow.org/api_docs/python/tf/contrib/distributions/Mixture) provides a number of useful apis such as `cdf`, `cross_entropy`, `entropy_lower_bound`, `kl_divergence`, `log_prob`, `prob`, `quantile`, and `sample`. 
 
