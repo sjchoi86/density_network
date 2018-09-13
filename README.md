@@ -1,8 +1,8 @@
 # Density modeling with TensorFlow
 
 We implement two density modeling methods:
-1. (**Unsupervised**) Gaussian mixture model (GMM): [notebook](https://github.com/sjchoi86/density_network/blob/master/src/demo_fit_MoG.ipynb)
-2. (**Supervised**) mixture density network (MDN): [notebook](https://github.com/sjchoi86/density_network/blob/master/src/demo_mdn_reg.ipynb)
+1. (**Unsupervised**) Gaussian mixture model (GMM): [notebook implementation](https://github.com/sjchoi86/density_network/blob/master/src/demo_fit_MoG.ipynb)
+2. (**Supervised**) mixture density network (MDN): [notebook implementation](https://github.com/sjchoi86/density_network/blob/master/src/demo_mdn_reg.ipynb)
 
 ### Gaussian Mixture Model
 
