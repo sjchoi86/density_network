@@ -6,7 +6,7 @@ We implement two density modeling methods:
 
 ### Gaussian Mixture Model
 
-<img src="src/pic/fig_gmm.png" width="800" height="320" />
+<img src="src/pic/fig_gmm.png" width="800" height="230" />
 
 Learning the parameters of a Gaussian mixture model on a synthetic example works remarkably well. Red and blue graphs are normalized histograms of training data and samples from the optimized GMM and black curve shows the pdf of the GMM. We model and depict the GMM per each dimension.. 
 
