@@ -8,7 +8,7 @@ Among with basic functionalities to train and sample, our mixture density networ
 
 <img src="src/pic/fig_mdn_res.png" width="800" height="350" />
 
-Each mixture whose mixture probability is bigger than certain theshold is shown with colors and mixtures with small mixture probabilities are shown with gray colors. 
+Each mixture whose mixture probability is bigger than certain theshold is shown with colors and mixtures with small mixture probabilities are shown with gray colors. **Isn't the colors beutiful?**
 
 <img src="src/pic/fig_mdn_var.png" width="800" height="350" />
 
