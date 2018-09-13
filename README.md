@@ -8,7 +8,8 @@ Among with basic functionalities to train and sample, our mixture density networ
 
 <img src="src/pic/fig_mdn_res.png" width="800" height="350" />
 Black dots and red crosses indicate training data and sampled outputs from the MDN, respectively. We can see that the MDN successfully model the given training data. 
-Each mixture whose mixture probability is bigger than certain theshold is shown with colors and mixtures with small mixture probabilities are shown with gray colors. **Isn't the colors beutiful?**
+Each mixture whose mixture probability is bigger than certain theshold is shown with colors and mixtures with small mixture probabilities are shown with gray colors. 
+~~BTW, Isn't the colors so BEAUTIFUL? :D~~
 
 <img src="src/pic/fig_mdn_var.png" width="800" height="350" />
 
