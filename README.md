@@ -4,6 +4,13 @@ We implement two density modeling methods:
 1. Unsupervised Gaussian mixture model (GMM): [notebook](https://github.com/sjchoi86/density_network/blob/master/src/demo_fit_MoG.ipynb)
 2. Mixture density network (MDN): [notebook](https://github.com/sjchoi86/density_network/blob/master/src/demo_mdn_reg.ipynb)
 
+### Gaussian Mixture Model
+
+<img src="src/pic/fig_gmm.png" width="800" height="320" />
+
+Learning the parameters of a Gaussian mixture model on a synthetic example works remarkably well. Red and blue graphs are normalized histograms of training data and samples from the optimized GMM and black curve shows the pdf of the GMM. We model and depict the GMM per each dimension.. 
+
+### Mixture Density Network
 Among with basic functionalities to train and sample, our mixture density network implementation is able to compute epistemic and aleatoric uncertainties of the prediction in our [paper](https://arxiv.org/abs/1709.02249). 
 
 <img src="src/pic/fig_mdn_res.png" width="800" height="350" />
