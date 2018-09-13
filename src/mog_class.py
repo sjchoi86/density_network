@@ -139,27 +139,33 @@ class MoG_indep_class(object):
             curr_pi = pi[i,:] # [k]
             curr_mu = mu[i,:] # [k]
             curr_var = var[i,:] # [k]
-            
             def pdf_Gaussian(_in,_mu,_var):
                 prob = 1/(np.sqrt(2*np.pi*_var))*np.exp(-0.5/_var*(_in-_mu)**2)
                 return prob
             def pdf_GMM(_ins,_pis,_mus,_vars):
                 probs = np.zeros_like(_ins)
-                for idx,_in in enumerate(_ins):
+                for idx,_in in enumerate(_ins): # for each input
                     prob = 0
                     for j in range(self.k): # for each mixture
                         prob += _pis[j]*pdf_Gaussian(_in,_mus[j],_vars[j])
-                    probs[idx] = prob
+                    probs[idx] = prob 
                 return probs
-            probs = pdf_GMM(xs,curr_pi,curr_mu,curr_var)
-            # Plot GMM pdf
-            plt.plot(xs,probs,'k-')
             # Plot histogram
             x_train_i = _x_train[:,i]
             x_sample_i = x_sample[:,i]
-            plt.hist([x_train_i,x_sample_i],bins=100,
-                     color=['r','b'],label=['train','sample'],density=True)
+            plt.hist([x_train_i,x_sample_i],bins=20,
+                     color=['r','b'],label=['train','sample'],density=True,alpha=0.5)
             plt.title('[%d]-th dimension'%(i+1),fontsize=13)
+            # Plot each mixture Gaussian pdf
+            cmap = plt.get_cmap('gist_rainbow')
+            colors = [cmap(ii) for ii in np.linspace(0,1,self.k)]
+            for j in range(self.k): # per each mixture
+                j_th_probs = curr_pi[j]*pdf_Gaussian(xs,curr_mu[j],curr_var[j])
+                plt.plot(xs,j_th_probs,'-',color='k',linewidth=1)
+            # Plot the total GMM pdf
+            gmm_probs = pdf_GMM(xs,curr_pi,curr_mu,curr_var) # compute GMM pdf 
+            plt.fill_between(xs,np.zeros_like(gmm_probs),gmm_probs,
+                             facecolor='g',interpolate=True, alpha=0.3)    
         plt.show()        
         
         
